@@ -1,7 +1,7 @@
 # 🌿 Óasis
 > Mapeamento de refúgios climáticos para dias de calor intenso em Recife.
 
-Sistema em Python que localiza pontos públicos com água, sombra e ar-condicionado gratuitos — bibliotecas, igrejas, shoppings e ONGs parceiras.
+Sistema em Python que localiza pontos públicos com água, sombra e ar-condicionado gratuitos, bibliotecas, igrejas, shoppings e ONGs parceiras.
 
 ---
 
