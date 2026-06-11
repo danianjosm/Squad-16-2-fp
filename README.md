@@ -31,7 +31,7 @@ python main.py
 | Felipe | [@lippefalcaoo](https://github.com/lippefalcaoo) |
 | Daniela | [@danianjosm](https://github.com/danianjosm) |
 | João Lucas | — |
-| Davi | — |
+| Davi | [@davibrazs](https://github.com/DaviBrazS) |
 
 ---
 
