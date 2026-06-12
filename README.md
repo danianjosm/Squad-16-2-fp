@@ -28,7 +28,7 @@ python main.py
 | Nome | GitHub |
 |---|---|
 | Gabriel Aragão | [@bogosorted](https://github.com/bogosorted) |
-| Felipe | [@lippefalcaoo](https://github.com/lippefalcaoo) |
+| Filipe | [@lippefalcaoo](https://github.com/lippefalcaoo) |
 | Daniela | [@danianjosm](https://github.com/danianjosm) |
 | João Lucas | — |
 | Davi | [@davibrazs](https://github.com/DaviBrazS) |
