@@ -8,3 +8,6 @@ class UsuarioObj:
 
     def is_admin(self):
         return self.tipo == 'admin'
+
+    def calcular_distancia(self, loja):
+        return ((self.latitude - loja.latitude)**2 + (self.longitude - loja.longitude)**2) ** 0.5

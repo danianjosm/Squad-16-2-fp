@@ -37,19 +37,18 @@ def buscar_proximos(usuario_logado):
     if len(todas_as_lojas) == 0:
         print("Nenhum refúgio cadastrado no momento.")
     else:
-        todas_as_lojas.sort(key=lambda loja: loja.calcular_distancia(usuario_logado.latitude, usuario_logado.longitude))
+
+        todas_as_lojas.sort(key=usuario_logado.calcular_distancia)
         
         for i, loja in enumerate(todas_as_lojas[:3]):
-            distancia_graus = loja.calcular_distancia(usuario_logado.latitude, usuario_logado.longitude)
-            # Aproximação simples: 1 grau de latitude/longitude é ~111 km no equador
-            distancia_km = distancia_graus * 111.0
+            distancia_graus = usuario_logado.calcular_distancia(loja)
             
             print(f"{i+1}º Lugar - {loja.nome}")
             print(f"   Endereço: {loja.endereco}")
-            if distancia_km == 0:
-                print(f"   Distância: Você está no {loja.nome}")
+            if distancia_graus == 0:
+                print(f"   Distância: Você está atualmente no {loja.nome}")
             else:
-                print(f"   Distância: Aproximadamente {distancia_km:.2f} km")
+                print(f"   Distância: {distancia_graus:.4f} unidades")
             print(f"   Status: {loja.status} | Recursos: {loja.recursos}\n")
             
     input("Pressione Enter para voltar...")
