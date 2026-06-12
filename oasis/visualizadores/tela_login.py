@@ -1,4 +1,5 @@
 from controladores.controlador_usuarios import ControladorUsuarios
+import visualizadores.menu_principal
 
 def iniciar_programa():
     try:
@@ -18,7 +19,6 @@ def iniciar_programa():
                 usuario_logado = ControladorUsuarios.autenticar(usuario, senha)
                 
                 if usuario_logado is not None:
-                    import visualizadores.menu_principal
                     visualizadores.menu_principal.exibir_menu(usuario_logado)
                     break
                 else:
