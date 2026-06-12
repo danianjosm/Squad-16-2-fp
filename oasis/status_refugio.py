@@ -1,32 +1,47 @@
-def atualizar_status(refugios, usuario_logado):
-    # filtrando para os refugios da pessoa logada
-    refugios_do_usuario = [r for r in refugios if r.usuario == usuario_logado]
-    
-    if not refugios_do_usuario:
-        print(f"Você não tem refúgios cadastrados")
+from utilitarios.conector_banco import ConectorBanco
+from modelos_de_objetos.refugio import RefugioObj
+
+def atualizar_status_refugio():
+    print("\n--- ATUALIZAR STATUS DE RÉFUGIO ---")0
+
+
+    refugios = ConectorBanco.Refugio.buscar_todos()
+
+
+    if not refugios:
+        print("Nenhum refúgio cadastrado.")
+        input("Pressione Enter para voltar...")
         return
 
-    listar_refugios(refugios_do_usuario)
+    for i, r in enumerate(refugios):
+        print(f"{i} - {r.nome} | {r.endereco} | Status: {r.status}")
 
-    num_refugio = int(input("\nDigite o número do refúgio: "))
-    refugio = refugios_do_usuario[num_refugio - 1]
+    try:
+        idx = int(input("\nDIgite o número do refúgio para alterar o status: "))
+
+        if 0 <= idx < len(refugios):
+            refugio = refugios[idx]
+
+            print(f"\nRefúgio: {refugio.nome}")
+            print(f"Status atual: {refugio.status}")
+
+            print("\n1. Marcar como ATIVO")
+            print("2. Marcar como FECHADO")
+            escolha = int(input("\nEscolha: "))
+
+            if escolha == 1:
+                refugio.status = 'ATIVO'
+                ConectorBanco.Refugio.atualizar(idx, refugio)
+                print("\n Status atualizado para: ATIVO!")
+            elif escolha == 2:
+                refugio.status = 'FECHADO'
+                ConectorBanco.Refugio.atualizar(idx, refugio)
+                print("\n Status atualizado para: FECHADIO!")
+            else:
+                print("\nOpção inválida!")
+        else:
+            print("\nNúmero inválido")
+    except ValueError:
+        print("\nVocê não digitou um número válido.")
     
-    # status atual
-    if refugio.status:
-        print(f"\nStatus atual de: ativo")
-    else:
-        print(f"\nStatus atual de: fechado")
-    
-    # escolhe o novo status
-    print("\n1. Marcar como ativo")
-    print("2. Marcar como fechado")
-    escolha = int(input("\nEscolha: "))
-    
-    if escolha == 1:
-        refugio.status = True
-        print(f"Status atualizado para: Ativo!")
-    elif escolha == 2:
-        refugio.status = False
-        print(f"Status atualizado para: Fechado!")
-    else:
-        print("Opção inválida!")
+    input("Pressione Enter para voltar...")
