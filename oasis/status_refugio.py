@@ -1,11 +1,10 @@
-from utilitarios.conector_banco import ConectorBanco
-from modelos_de_objetos.refugio import RefugioObj
+from controladores.controlador_refugios import ControladorRefugios
 
 def atualizar_status_refugio():
-    print("\n--- ATUALIZAR STATUS DE RÉFUGIO ---")0
+    print("\n--- ATUALIZAR STATUS DE REFÚGIO ---")
 
 
-    refugios = ConectorBanco.Refugio.buscar_todos()
+    refugios = ControladorRefugios.buscar_todos()
 
 
     if not refugios:
@@ -17,7 +16,7 @@ def atualizar_status_refugio():
         print(f"{i} - {r.nome} | {r.endereco} | Status: {r.status}")
 
     try:
-        idx = int(input("\nDIgite o número do refúgio para alterar o status: "))
+        idx = int(input("\nDigite o número do refúgio para alterar o status: "))
 
         if 0 <= idx < len(refugios):
             refugio = refugios[idx]
@@ -31,12 +30,12 @@ def atualizar_status_refugio():
 
             if escolha == 1:
                 refugio.status = 'ATIVO'
-                ConectorBanco.Refugio.atualizar(idx, refugio)
+                ControladorRefugios.atualizar(idx, refugio)
                 print("\n Status atualizado para: ATIVO!")
             elif escolha == 2:
                 refugio.status = 'FECHADO'
-                ConectorBanco.Refugio.atualizar(idx, refugio)
-                print("\n Status atualizado para: FECHADIO!")
+                ControladorRefugios.atualizar(idx, refugio)
+                print("\n Status atualizado para: FECHADO!")
             else:
                 print("\nOpção inválida!")
         else:

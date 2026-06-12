@@ -1,5 +1,3 @@
-import math
-
 class RefugioObj:
     def __init__(self, nome, endereco, status, recursos, latitude, longitude):
         self.nome = nome.strip()
@@ -13,4 +11,4 @@ class RefugioObj:
         return f"| {self.nome} | {self.endereco} | {self.status} | {self.recursos} | {self.latitude} | {self.longitude} |"
 
     def calcular_distancia(self, lat_usuario, lon_usuario):
-        return math.sqrt((self.latitude - lat_usuario)**2 + (self.longitude - lon_usuario)**2)
+        return ((self.latitude - lat_usuario)**2 + (self.longitude - lon_usuario)**2) ** 0.5 # elevado a meio é igual a 1/2 que é a forma de tirar a raiz quadrada sem importar math

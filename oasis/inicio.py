@@ -1,1 +1,3 @@
-from visualizadores import tela_login
+from visualizadores.tela_login import iniciar_programa
+
+iniciar_programa()

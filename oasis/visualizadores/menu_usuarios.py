@@ -1,16 +1,52 @@
-from utilitarios.conector_banco import ConectorBanco
+from controladores.controlador_usuarios import ControladorUsuarios
 from modelos_de_objetos.usuario import UsuarioObj
 
 def listar_usuarios():
-    print("\n--- LISTA DE USUÁRIOS ---")
-    usuarios = ConectorBanco.Usuario.buscar_todos()
-    for i, u in enumerate(usuarios):
-        print(f"{i} - {u.username} | {u.tipo.upper()}")
-    input("\nPressione Enter para voltar...")
+    usuarios = ControladorUsuarios.buscar_todos()
+    if not usuarios:
+        print("\nNenhum usuário cadastrado no momento.")
+        input("\nPressione Enter para voltar...")
+        return
+        
+    pagina_atual = 0
+    usuarios_por_pagina = 5
+    
+    while True:
+        print("\n" * 50)
+        print(f"--- LISTA DE USUÁRIOS (Página {pagina_atual + 1}) ---")
+        
+        indice_inicial = pagina_atual * usuarios_por_pagina
+        indice_final = indice_inicial + usuarios_por_pagina
+        usuarios_fatiados = usuarios[indice_inicial:indice_final]
+        
+        if not usuarios_fatiados:
+            print("Fim da linha, sem dados")
+        else:
+            for i, u in enumerate(usuarios_fatiados):
+                idx = indice_inicial + i
+                print(f"{idx} - {u.username} | {u.tipo.upper()}")
+                
+        print("\n[ P ] Próxima Página  |  [ A ] Página Anterior  |  [ Qualquer tecla ] Voltar ao Menu")
+        acao = input("Escolha o que fazer: ").strip().upper()
+        
+        if acao == 'P':
+            if len(usuarios_fatiados) < usuarios_por_pagina or (pagina_atual + 1) * usuarios_por_pagina >= len(usuarios):
+                print("\nVocê já está no limite! Não há próxima página.")
+                input("Pressione Enter para continuar...")
+            else:
+                pagina_atual += 1
+        elif acao == 'A':
+            if pagina_atual > 0:
+                pagina_atual -= 1
+            else:
+                print("\nVocê já está na primeira página!")
+                input("Pressione Enter para continuar...")
+        else:
+            break
 
 def editar_usuario():
     print("\n--- EDITAR USUÁRIO ---")
-    usuarios = ConectorBanco.Usuario.buscar_todos()
+    usuarios = ControladorUsuarios.buscar_todos()
     for i, u in enumerate(usuarios):
         print(f"{i} - {u.username} ({u.tipo})")
         
@@ -28,7 +64,7 @@ def editar_usuario():
             nova_lon = input(f"Nova longitude ({u.longitude}): ") or u.longitude
             
             user_editado = UsuarioObj(novo_user, nova_senha, novo_tipo, nova_lat, nova_lon)
-            ConectorBanco.Usuario.atualizar(idx, user_editado)
+            ControladorUsuarios.atualizar(idx, user_editado)
             print("\nUsuário editado com sucesso!")
         else:
             print("\nNúmero inválido.")
@@ -38,14 +74,14 @@ def editar_usuario():
 
 def deletar_usuario():
     print("\n--- DELETAR USUÁRIO ---")
-    usuarios = ConectorBanco.Usuario.buscar_todos()
+    usuarios = ControladorUsuarios.buscar_todos()
     for i, u in enumerate(usuarios):
         print(f"{i} - {u.username} ({u.tipo})")
         
     try:
         idx = int(input("\nDigite o número do usuário para deletar: "))
         if 0 <= idx < len(usuarios):
-            ConectorBanco.Usuario.deletar(idx)
+            ControladorUsuarios.deletar(idx)
             print("\nUsuário deletado com sucesso!")
         else:
             print("\nNúmero inválido.")

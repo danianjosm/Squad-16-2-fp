@@ -1,7 +1,7 @@
-from utilitarios.conector_banco import ConectorBanco
+from controladores.controlador_refugios import ControladorRefugios
 from modelos_de_objetos.refugio import RefugioObj
 
-def listar_paginado():
+def listar_refugios():
     pagina_atual = 0
     lojas_por_pagina = 5
     
@@ -10,7 +10,7 @@ def listar_paginado():
         print(f"--- LISTA DE REFÚGIOS (Página {pagina_atual + 1}) ---")
         indice_inicial = pagina_atual * lojas_por_pagina
         
-        quantidade_impressa = ConectorBanco.Refugio.selecionar(lojas_por_pagina, indice_inicial)
+        quantidade_impressa = ControladorRefugios.selecionar(lojas_por_pagina, indice_inicial)
         
         print("\n[ P ] Próxima Página  |  [ A ] Página Anterior  |  [ Qualquer tecla ] Voltar ao Menu")
         acao = input("Escolha o que fazer: ").strip().upper()
@@ -32,7 +32,7 @@ def listar_paginado():
 
 def buscar_proximos(usuario_logado):
     print("\n--- OS 3 REFÚGIOS MAIS PRÓXIMOS DE VOCÊ ---")
-    todas_as_lojas = ConectorBanco.Refugio.buscar_todos()
+    todas_as_lojas = ControladorRefugios.buscar_todos()
     
     if len(todas_as_lojas) == 0:
         print("Nenhum refúgio cadastrado no momento.")
@@ -40,8 +40,16 @@ def buscar_proximos(usuario_logado):
         todas_as_lojas.sort(key=lambda loja: loja.calcular_distancia(usuario_logado.latitude, usuario_logado.longitude))
         
         for i, loja in enumerate(todas_as_lojas[:3]):
+            distancia_graus = loja.calcular_distancia(usuario_logado.latitude, usuario_logado.longitude)
+            # Aproximação simples: 1 grau de latitude/longitude é ~111 km no equador
+            distancia_km = distancia_graus * 111.0
+            
             print(f"{i+1}º Lugar - {loja.nome}")
             print(f"   Endereço: {loja.endereco}")
+            if distancia_km == 0:
+                print(f"   Distância: Você está no {loja.nome}")
+            else:
+                print(f"   Distância: Aproximadamente {distancia_km:.2f} km")
             print(f"   Status: {loja.status} | Recursos: {loja.recursos}\n")
             
     input("Pressione Enter para voltar...")
@@ -56,14 +64,14 @@ def criar_refugio():
     lon = input("Longitude (Ex: -34.8770): ")
     
     nova_loja = RefugioObj(nome, end, status, rec, lat, lon)
-    ConectorBanco.Refugio.inserir(nova_loja)
+    ControladorRefugios.inserir(nova_loja)
     
     print("\nRefúgio criado com sucesso!")
     input("Pressione Enter para voltar...")
 
 def editar_refugio():
     print("\n--- EDITAR REFÚGIO ---")
-    lojas = ConectorBanco.Refugio.buscar_todos()
+    lojas = ControladorRefugios.buscar_todos()
     for i, l in enumerate(lojas):
         print(f"{i} - {l.nome} ({l.endereco})")
     
@@ -82,7 +90,7 @@ def editar_refugio():
             nova_lon = input(f"Nova longitude ({loja.longitude}): ") or loja.longitude
             
             loja_editada = RefugioObj(novo_nome, novo_end, novo_status, novo_rec, nova_lat, nova_lon)
-            ConectorBanco.Refugio.atualizar(idx, loja_editada)
+            ControladorRefugios.atualizar(idx, loja_editada)
             print("\nRefúgio editado com sucesso!")
         else:
             print("\nNúmero inválido.")
@@ -92,14 +100,14 @@ def editar_refugio():
 
 def deletar_refugio():
     print("\n--- DELETAR REFÚGIO ---")
-    lojas = ConectorBanco.Refugio.buscar_todos()
+    lojas = ControladorRefugios.buscar_todos()
     for i, l in enumerate(lojas):
         print(f"{i} - {l.nome}")
         
     try:
         idx = int(input("\nDigite o número do refúgio para deletar: "))
         if 0 <= idx < len(lojas):
-            ConectorBanco.Refugio.deletar(idx)
+            ControladorRefugios.deletar(idx)
             print("\nRefúgio deletado com sucesso!")
         else:
             print("\nNúmero inválido.")

@@ -5,14 +5,14 @@ def exibir_menu(usuario_logado):
         print("\n" * 50)
         print(f"\n--- BEM VINDO AO OASIS ({usuario_logado.tipo.upper()}) ---")
         
-        print("1. Listar refúgios (paginado)")
+        print("1. Listar refúgios")
         print("2. Buscar refúgios mais próximos")
         
         if usuario_logado.is_admin():
             print("3. Criar novo refúgio")
             print("4. Editar refúgio")
             print("5. Deletar refúgio")
-            print("6. Listar todos os usuários")
+            print("6. Listar usuários")
             print("7. Editar usuário")
             print("8. Deletar usuário")
             
@@ -21,7 +21,7 @@ def exibir_menu(usuario_logado):
         opcao = input("Escolha uma opção: ")
         
         if opcao == '1':
-            menu_refugios.listar_paginado()
+            menu_refugios.listar_refugios()
             
         elif opcao == '2':
             menu_refugios.buscar_proximos(usuario_logado)
